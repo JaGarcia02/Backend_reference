@@ -1,0 +1,18 @@
+GET http://localhost:3003/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSmEiLCJpYXQiOjE2NzcxMzc0MzgsImV4cCI6MTY3NzEzNzQ1M30.c81o3OonnxWwrxLPKoV0XrXhvh_UcOYgPthZzqO4JJA
+
+###
+POST  http://localhost:3004/token
+Content-Type: application/json
+
+{
+    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSmEiLCJpYXQiOjE2NzcxMzczMTd9.dVBb1psw8ri0GwlEtG6F0IRIuEEG_0gyxsIqBj8CAZE"
+}
+
+###
+POST http://localhost:3004/login
+Content-Type: application/json
+
+{
+    "username":"Ja"
+}
