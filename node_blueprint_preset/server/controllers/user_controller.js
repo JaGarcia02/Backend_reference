@@ -1,4 +1,5 @@
 const assyncHandler = require("express-async-handler");
+const User = require("../models/user_model");
 
 /* desc: Login User 
    method: POST request
@@ -32,7 +33,23 @@ const logout_user = assyncHandler(async (req, res) => {
 */
 const create_user = assyncHandler(async (req, res) => {
   try {
-    return res.status(200).json({ message: "Create User" });
+    const { name, email, password, role } = req.body;
+    const existing_email = await User.findOne({ email: email });
+
+    // existing email condition is true //
+    if (existing_email) {
+      console.log("Email is already existing, please try again!");
+      throw new Error("Email is already existing, please try again!");
+    }
+
+    // create user function //
+    const user_data = await User.create({
+      name: name,
+      email: email,
+      password: password,
+      role: role,
+    });
+    return res.status(200).json({ message: "Create User", payload: user_data });
   } catch (error) {
     res.status(500);
     throw new Error(error);
