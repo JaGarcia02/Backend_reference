@@ -1,5 +1,6 @@
 const assyncHandler = require("express-async-handler");
 const User = require("../models/user_model");
+const bcrypt = require("bcrypt");
 
 /* desc: Login User 
    method: POST request
@@ -42,14 +43,34 @@ const create_user = assyncHandler(async (req, res) => {
       throw new Error("Email is already existing, please try again!");
     }
 
+    // hashing the password  //
+    const salt = await bcrypt.genSalt(10);
+    const HashedPassword = await bcrypt.hash(password, salt);
+
     // create user function //
     const user_data = await User.create({
       name: name,
       email: email,
-      password: password,
+      password: HashedPassword,
       role: role,
     });
-    return res.status(200).json({ message: "Create User", payload: user_data });
+
+    // to view the result of the created user in the console //
+    if (user_data) {
+      console.log(user_data);
+      return res.status(200).json({
+        message: "Create User",
+        payload: {
+          _id: user_data._id,
+          name: user_data.name,
+          email: user_data.email,
+          role: user_data.role,
+        },
+      });
+    } else {
+      console.log("Error user creation!");
+      throw new Error("Error user creation!");
+    }
   } catch (error) {
     res.status(500);
     throw new Error(error);
