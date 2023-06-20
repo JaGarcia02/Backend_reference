@@ -1,6 +1,34 @@
 const assyncHandler = require("express-async-handler");
 const Book = require("../models/book_model");
 
+/* desc: View all Book 
+   method: POST request
+   access: Public
+*/
+const viewAll_books = assyncHandler(async (req, res) => {
+  try {
+    const book_list = await Book.find({});
+    return res.status(200).json({ payload: book_list });
+  } catch (error) {
+    res.status(500);
+    throw new Error(error);
+  }
+});
+
+/* desc: View Book by author 
+   method: POST request
+   access: Private
+*/
+const viewAll_booksAuthor = assyncHandler(async (req, res) => {
+  try {
+    const author_booklist = await Book.find({ author: req.user_data.name });
+    return res.status(200).json({ payload: author_booklist });
+  } catch (error) {
+    res.status(500);
+    throw new Error(error);
+  }
+});
+
 /* desc: Create Book 
    method: POST request
    access: Private
@@ -63,11 +91,17 @@ const update_book = assyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     const { book_title, book_description } = req.body;
-    await Book.findByIdAndUpdate({
-      _id: id,
-      book_title: book_title,
-      book_description: book_description,
-    });
+    await Book.findByIdAndUpdate(
+      { _id: id },
+      {
+        book_title: book_title,
+        book_description: book_description,
+      }
+    );
+    const updated_book = await Book.findById({ _id: id });
+    return res
+      .status(200)
+      .json({ message: "Book Updated", payload: updated_book });
   } catch (error) {
     res.status(500);
     throw new Error(error);
@@ -89,7 +123,13 @@ const delete_book = assyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { create_book, delete_book, update_book };
+module.exports = {
+  create_book,
+  delete_book,
+  update_book,
+  viewAll_books,
+  viewAll_booksAuthor,
+};
 
 /*
 
