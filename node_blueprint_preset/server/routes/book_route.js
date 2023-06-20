@@ -22,3 +22,8 @@ router.delete(
 );
 
 module.exports = router;
+
+/*
+The middleware is only a checker in the response to make your route protected 
+and authenticated. You can make a middleware depending on the purpose.
+*/
