@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { user_model } = require("../models");
+const User = require("../models/user_model");
 const assyncHandler = require("express-async-handler");
 
 const token_validation = assyncHandler(async (req, res, next) => {
@@ -16,16 +16,19 @@ const token_validation = assyncHandler(async (req, res, next) => {
       // Verify Token
       const decoded = jwt.verify(Token, process.env.JWT_SECRET);
 
-      req.user_dataId = await user_model.findById(decoded._id);
+      // Get user Token
+      req.user_data = await User.findById(decoded.user_dataId); // <-- this is the decoded data from the token
       next();
     } catch (error) {
       console.log(error);
-      throw new Error("Invalid token!");
+      return res
+        .status(400)
+        .json({ message: "Invalid Token / Token not recognize!" });
     }
-    if (!Token) {
-      console.log("No Token!");
-      return res.status(401).json({ message: "No Token!" });
-    }
+  }
+  if (!Token) {
+    console.log("No Token Found!");
+    return res.status(401).json({ message: "No Token Found!" });
   }
 });
 

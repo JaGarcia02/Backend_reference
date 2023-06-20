@@ -7,7 +7,7 @@ const Book = require("../models/book_model");
 */
 const create_book = assyncHandler(async (req, res) => {
   try {
-    const { book_title, book_description, author, user_id } = req.body;
+    const { book_title, book_description } = req.body;
 
     // check fields //
     if (!book_title) {
@@ -25,24 +25,30 @@ const create_book = assyncHandler(async (req, res) => {
       );
     }
 
-    // create book function //
+    //create book function //
     const book_data = await Book.create({
       book_title: book_title,
       book_description: book_description,
+      author: req.user_data.name,
+      user_id: req.user_data._id,
     });
 
-    // to view the result of the created user in the console //
+    //to view the result of the created user in the console //
     if (book_data) {
-      console.log(user_data);
+      console.log(book_data);
       return res.status(200).json({
         message: "Create Book",
         payload: {
           _id: book_data._id,
           book_title: book_data.book_title,
           book_description: book_data.book_description,
+          author: req.user_data.name,
+          user_id: req.user_data._id,
         },
       });
     }
+
+    console.log(req.user_dataId.name);
   } catch (error) {
     res.status(500);
     throw new Error(error);
@@ -50,3 +56,11 @@ const create_book = assyncHandler(async (req, res) => {
 });
 
 module.exports = { create_book };
+
+/*
+
+The middleware can also serve data in the controller, check book_create,
+instead of decoding it in the frontend we can use the middleware decoded token
+and use it to fill the data needed to be sent 
+
+*/
