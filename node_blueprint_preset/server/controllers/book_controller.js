@@ -55,7 +55,41 @@ const create_book = assyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { create_book };
+/* desc: Update Book 
+   method: POST request
+   access: Private
+*/
+const update_book = assyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { book_title, book_description } = req.body;
+    await Book.findByIdAndUpdate({
+      _id: id,
+      book_title: book_title,
+      book_description: book_description,
+    });
+  } catch (error) {
+    res.status(500);
+    throw new Error(error);
+  }
+});
+
+/* desc: Delete Book 
+   method: POST request
+   access: Private
+*/
+const delete_book = assyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Book.findByIdAndDelete({ _id: id });
+    return res.status(200).json({ message: "Book Deleted!" });
+  } catch (error) {
+    res.status(500);
+    throw new Error(error);
+  }
+});
+
+module.exports = { create_book, delete_book, update_book };
 
 /*
 

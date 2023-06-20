@@ -7,6 +7,7 @@ const { notFound, errorHandler } = require("./middleware/error_middleware");
 const UserRoute = require("./routes/user_route");
 const BookRoute = require("./routes/book_route");
 const DatabaseConnection = require("./configs/database_connection");
+const { userRole_Authorization } = require("./middleware/roleAuth_middleware");
 
 app.use(cors());
 app.use(express.json()); // <-- this will allow to send json format in the postman when sending request
