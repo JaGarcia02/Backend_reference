@@ -1,6 +1,7 @@
 const assyncHandler = require("express-async-handler");
 const User = require("../models/user_model");
 const bcrypt = require("bcrypt");
+const { generateToken } = require("../utils/generate_token");
 
 /* desc: Login User 
    method: POST request
@@ -8,7 +9,43 @@ const bcrypt = require("bcrypt");
 */
 const login_user = assyncHandler(async (req, res) => {
   try {
-    return res.status(200).json({ message: "Login User" });
+    const { email, password } = req.body;
+    // find email if existing
+    const user_data = await User.findOne({ email: email });
+
+    // check input fields
+    if (!email) {
+      console.log("Email input is empty!, please try again.");
+      throw new Error("Email input is empty!, please try again.");
+    }
+    if (!password) {
+      console.log("Password input is empty!, please try again.");
+      throw new Error("Password input is empty!, please try again.");
+    }
+    if (!email && !password) {
+      console.log("Email & Password fields is empty!, please try again.");
+      throw new Error("Email & Password fields is empty!, please try again.");
+    }
+
+    // cheking if email is valid
+    if (!user_data) {
+      console.log("Email not found, please try again!");
+      throw new Error("Email not found, please try again!");
+    }
+    // password validation
+    if (user_data && (await bcrypt.compareSync(password, user_data.password))) {
+      generateToken(
+        res,
+        user_data._id,
+        user_data.name,
+        user_data.email,
+        user_data.role
+      );
+      return res.status(200).json({ message: "Login User" });
+    } else {
+      res.status(401).json({ message: "Wrong password!" });
+      throw new Error("Wrong password!");
+    }
   } catch (error) {
     res.status(500);
     throw new Error(error);
