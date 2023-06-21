@@ -11,3 +11,7 @@ const userRole_Authorization = assyncHandler(async (req, res, next) => {
 });
 
 module.exports = { userRole_Authorization };
+
+/*
+This will check on the role if you are an admin or not
+*/

@@ -3,7 +3,7 @@ const User = require("../models/user_model");
 const assyncHandler = require("express-async-handler");
 
 const token_validation = assyncHandler(async (req, res, next) => {
-  let Token;
+  let token;
 
   if (
     req.headers.authorization &&
@@ -11,10 +11,10 @@ const token_validation = assyncHandler(async (req, res, next) => {
   ) {
     try {
       // Get token
-      Token = req.headers.authorization.split(" ")[1];
+      token = req.headers.authorization.split(" ")[1];
 
       // Verify Token
-      const decoded = jwt.verify(Token, process.env.JWT_SECRET);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       // Get user Token
       req.user_data = await User.findById(decoded.user_dataId); // <-- this is the decoded data from the token
@@ -26,7 +26,7 @@ const token_validation = assyncHandler(async (req, res, next) => {
         .json({ message: "Invalid Token / Token not recognize!" });
     }
   }
-  if (!Token) {
+  if (!token) {
     console.log("No Token Found!");
     return res.status(401).json({ message: "No Token Found!" });
   }

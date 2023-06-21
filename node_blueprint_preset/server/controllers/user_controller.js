@@ -1,7 +1,7 @@
 const assyncHandler = require("express-async-handler");
 const User = require("../models/user_model");
 const bcrypt = require("bcrypt");
-const { generateToken } = require("../utils/generate_token");
+const generateToken = require("../utils/generate_token");
 
 /* desc: Login User 
    method: POST request
@@ -41,7 +41,15 @@ const login_user = assyncHandler(async (req, res) => {
         user_data.email,
         user_data.role
       );
-      return res.status(200).json({ message: "Login User" });
+      return res.status(200).json({
+        message: "Login User",
+        payload: {
+          _id: user_data._id,
+          name: user_data.name,
+          email: user_data.email,
+          role: user_data.role,
+        },
+      });
     } else {
       res.status(401).json({ message: "Wrong password!" });
       throw new Error("Wrong password!");

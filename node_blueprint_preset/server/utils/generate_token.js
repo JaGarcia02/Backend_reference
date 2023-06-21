@@ -9,25 +9,22 @@ const generateToken = (
   user_dataRole
 ) => {
   // signing token to cookie
-  const Token = jwt.sign(
+  const token = jwt.sign(
     { user_dataId, user_dataName, user_dataEmail, user_dataRole },
     process.env.JWT_SECRET,
     {
-      expiresIn: "10m",
+      expiresIn: "30d",
     }
   );
-
-  res.cookie("jwt", Token, {
+  return res.cookie("jwt", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV !== "development",
     sameSite: "strict",
-    maxAge: 30 * 24 * 60 * 1000,
+    maxAge: 30 * 24 * 60 * 60 * 1000,
   });
 };
 
-module.exports = {
-  generateToken,
-};
+module.exports = generateToken;
 
 /*
  The user_dataId and user_data etc is in the controller, when the user is created the response is the user_data
