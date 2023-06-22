@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Cookies from "js-cookie";
 import axios from "axios";
 
 const LoginPage = () => {
@@ -13,7 +14,10 @@ const LoginPage = () => {
           password: inputs.password,
         }
       )
-      .then((data) => console.log(data))
+      .then((data) => {
+        Cookies.set("token", data.data.payload.token);
+        console.log(data);
+      })
       .catch((err) => console.log(err));
   };
   return (

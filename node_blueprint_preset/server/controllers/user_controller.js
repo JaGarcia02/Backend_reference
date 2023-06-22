@@ -34,7 +34,7 @@ const login_user = assyncHandler(async (req, res) => {
     }
     // password validation
     if (user_data && (await bcrypt.compareSync(password, user_data.password))) {
-      generateToken(
+      const token = generateToken(
         res,
         user_data._id,
         user_data.name,
@@ -48,6 +48,7 @@ const login_user = assyncHandler(async (req, res) => {
           name: user_data.name,
           email: user_data.email,
           role: user_data.role,
+          token: token,
         },
       });
     } else {
