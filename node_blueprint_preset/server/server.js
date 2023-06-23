@@ -32,4 +32,8 @@ app.listen(port, () => {
 This is a setup and new blueprint of using none module type.
 Use this file structure.
 This is pure backend, and this can be a good reference for future projects.
+
+Reminder in the frontend you need to install ***Cookies ("react: npm Cookies")***,
+to let you set the cookies in the browser. Cors will not set the cookie that 
+is sent in the request.
 */

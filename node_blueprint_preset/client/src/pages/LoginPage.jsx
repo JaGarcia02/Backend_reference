@@ -1,25 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
+import moment from "moment";
 
 const LoginPage = () => {
   const [inputs, setInputs] = useState({ email: "", password: "" });
-  const login_user = async () => {
+
+  const login_user = () => {
     axios
       .post(
-        "http://localhost:8797/api/user/login",
+        "http://localhost:8888/test/login-user",
 
         {
           email: inputs.email,
           password: inputs.password,
         }
       )
-      .then((data) => {
-        Cookies.set("token", data.data.payload.token);
-        console.log(data);
+      .then((res) => {
+        Cookies.set("token", res.data.payload.token);
       })
       .catch((err) => console.log(err));
   };
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setTimeout(moment().format("MMMM DD, YYYY hh:mm A"));
+  //   }, 2000);
+  // }, []);
   return (
     <>
       <div className="loginMainContainer">

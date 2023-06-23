@@ -29,6 +29,8 @@ const login_user = assyncHandler(async (req, res) => {
       return res
         .status(200)
         .cookie("user_access_token", Token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV !== "development",
           expires: new Date(Date.now() + 60 * 60 * 24 * 1000 * 1),
         })
         .json(Token);
