@@ -74,11 +74,18 @@ const login_user = async (req, res) => {
           },
           token: Token,
         });
+    } else {
+      return res.status(401).json({ message: "Wrong password!" });
     }
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error.message });
   }
+};
+
+const logout_user = async (req, res) => {
+  res.cookie("user_token", null, { expires: new Date(0) });
+  return res.status(200).json({ message: "User has logged-out." });
 };
 
 const get_token = async (req, res) => {
@@ -113,4 +120,4 @@ const generate_token = (_id, name, email, password) => {
   );
 };
 
-module.exports = { create_user, login_user, get_token };
+module.exports = { create_user, login_user, get_token, logout_user };
