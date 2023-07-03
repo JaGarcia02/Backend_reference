@@ -10,6 +10,7 @@ const {
 router.post("/create-user", create_user);
 router.post("/login-user", login_user);
 router.post("/check-token", get_token);
-router.post("/logout-user", logout_user);
+
+router.get("/logout-user", logout_user);
 
 module.exports = router;
