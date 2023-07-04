@@ -116,7 +116,7 @@ const generate_token = (_id, name, email, password) => {
       password,
     },
     process.env.JWT_SECRET,
-    { expiresIn: "10m" }
+    { expiresIn: "1h" }
   );
 };
 
