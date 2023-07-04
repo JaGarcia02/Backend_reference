@@ -89,13 +89,13 @@ const logout_user = async (req, res) => {
 };
 
 const get_token = async (req, res) => {
-  const { Token } = req.body;
-  if (!Token) {
+  const { token } = req.body;
+  if (!token) {
     return res.status(401).json({ message: "No Token!" });
   }
   try {
-    const decoded_token = jwt.verify(Token, process.env.JWT_SECRET);
-    const token_data = await User.findOne(decoded_token._id);
+    const decoded_token = jwt.verify(token, process.env.JWT_SECRET);
+    const token_data = await User.findById(decoded_token._id);
     if (!token_data) {
       return res.status(401).json({ message: "Not Found!" });
     } else {
