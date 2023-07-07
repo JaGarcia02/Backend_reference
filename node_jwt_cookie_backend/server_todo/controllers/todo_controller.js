@@ -4,12 +4,12 @@ const jwt = require("jsonwebtoken");
 
 const create_todo = async (req, res) => {
   try {
-    const { task } = req.body;
+    const { task, user } = req.body;
     if (!task) {
       console.log("Please complete field below!");
       return res.status(400).json({ message: "Please complete field below!" });
     }
-    await Todo.create({ task: task, user: req.user_token.email });
+    await Todo.create({ task: task, user: user });
     const todo_data = await Todo.find({});
     return res
       .status(200)
@@ -45,7 +45,7 @@ const update_todo = async (req, res) => {
 
 const view_todoList_byUser = async (req, res) => {
   try {
-    const { user } = req.params;
+    const { user } = req.body;
     if (!user) {
       return res.status(400).json({ message: "User Not Authorized!" });
     }
