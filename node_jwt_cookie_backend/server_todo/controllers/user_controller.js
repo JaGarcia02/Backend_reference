@@ -103,7 +103,7 @@ const get_token = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    return res.status(401).json({ message: "Not User Authorized!" });
+    return res.status(401).json({ message: "Token Expired!" });
   }
 };
 
@@ -116,7 +116,7 @@ const generate_token = (_id, name, email, password) => {
       password,
     },
     process.env.JWT_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: "10h" }
   );
 };
 
