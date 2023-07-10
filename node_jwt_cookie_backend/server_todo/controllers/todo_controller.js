@@ -21,7 +21,7 @@ const create_todo = async (req, res) => {
 const update_todo = async (req, res) => {
   try {
     const { id } = req.params;
-    const { task } = req.body;
+    const { task, user } = req.body;
     const task_data = await Todo.findById({ _id: id });
     if (!task) {
       return res.status(400).json({ message: "Please enter task!" });
@@ -30,11 +30,9 @@ const update_todo = async (req, res) => {
       return res.status(400).json({ message: "Undefined ID" });
     }
     await Todo.findByIdAndUpdate({ _id: id }, { task: task });
-    const updated_todo = await Todo.findOne({ _id: id });
+    const updated_todo = await Todo.find({ user: user });
 
-    return res
-      .status(200)
-      .json({ message: "Task updated!", payload: updated_todo });
+    return res.status(200).json(updated_todo);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error.message });
@@ -64,6 +62,16 @@ const view_allTask = async (req, res) => {
   }
 };
 
+const view_taskById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const view_task = await Todo.findById({ _id: id });
+    return res.status(200).json(view_task);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 const view_todoList_byUser = async (req, res) => {
   try {
     // const { user } = req.body;
@@ -85,4 +93,5 @@ module.exports = {
   update_todo,
   view_allTask,
   delete_task,
+  view_taskById,
 };
