@@ -10,10 +10,8 @@ const create_todo = async (req, res) => {
       return res.status(400).json({ message: "Please complete field below!" });
     }
     await Todo.create({ task: task, user: user });
-    const todo_data = await Todo.find({});
-    return res
-      .status(200)
-      .json({ message: "Todo created!", payload: todo_data });
+    const task_list = await Todo.find({ user: user });
+    return res.status(200).json(task_list);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error.message });
@@ -43,9 +41,33 @@ const update_todo = async (req, res) => {
   }
 };
 
+const delete_task = async (req, res) => {
+  try {
+    const { id, user } = req.params;
+    await Todo.findByIdAndDelete({ _id: id });
+    const updated_taskList = await Todo.find({ user: user });
+
+    return res.status(200).json(updated_taskList);
+
+    // return res.status(200).json(data_delete);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const view_allTask = async (req, res) => {
+  try {
+    const task_data = await Todo.find({});
+    return res.status(200).json(task_data);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 const view_todoList_byUser = async (req, res) => {
   try {
-    const { user } = req.body;
+    // const { user } = req.body;
+    const { user } = req.params;
     if (!user) {
       return res.status(400).json({ message: "User Not Authorized!" });
     }
@@ -57,4 +79,10 @@ const view_todoList_byUser = async (req, res) => {
   }
 };
 
-module.exports = { create_todo, view_todoList_byUser, update_todo };
+module.exports = {
+  create_todo,
+  view_todoList_byUser,
+  update_todo,
+  view_allTask,
+  delete_task,
+};
