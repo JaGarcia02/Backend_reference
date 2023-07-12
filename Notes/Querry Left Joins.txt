@@ -1,0 +1,340 @@
+SELECT test.tbl_empplacement2.BillSubDeptID FROM test.tbl_empplacement2;
+
+SELECT empid, date_created, CreatedBy, date_start,date_end FROM `tbl_payroll`;
+
+default
+SELECT * FROM `tbl_payroll`
+http://192.168.100.9/phpmyadmin/index.php?route=/sql&db=db_payroll&table=tbl_payroll
+http://192.168.100.9/phpmyadmin/index.php?route=/sql&db=test&table=custinfo&pos=0
+
+
+SELECT 
+db_payroll.tbl_payroll.empid,
+db_payroll.tbl_payroll.DateCreated,
+db_payroll.tbl_payroll.CreatedBy,
+db_payroll.tbl_payroll.date_start,
+db_payroll.tbl_payroll.date_end,
+db_payroll.tbl_payroll.name,
+db_payroll.tbl_payroll.position
+FROM db_payroll.tbl_payroll;
+
+
+SELECT 
+db_payroll.tbl_payroll.empid,
+db_payroll.tbl_payroll.DateCreated,
+db_payroll.tbl_payroll.CreatedBy,
+db_payroll.tbl_payroll.date_start,
+db_payroll.tbl_payroll.date_end,
+db_payroll.tbl_payroll.name,
+db_payroll.tbl_payroll.position,
+@StatDeducID := db_payroll.tbl_payroll.StatutoryDeductionsID,
+@PRID := db_payroll.tbl_payroll.PRID,
+@AbsentNum := (IFNULL(( db_payroll.tbl_payroll.absent_no),0) + db_payroll.tbl_payroll.absent_no) / 8 AS TotalNumAbsent,
+
+
+
+SELECT 
+db_payroll.tbl_payroll.empid,
+db_payroll.tbl_payroll.DateCreated,
+db_payroll.tbl_payroll.CreatedBy,
+db_payroll.tbl_payroll.date_start,
+db_payroll.tbl_payroll.date_end,
+db_payroll.tbl_payroll.name,
+db_payroll.tbl_payroll.position,
+@StatDeducID := db_payroll.tbl_payroll.StatutoryDeductionsID,
+@PRID := db_payroll.tbl_payroll.PRID,
+@AbsentNum := (IFNULL(( db_payroll.tbl_payroll.absent_no),0) + db_payroll.tbl_payroll.absent_no) / 8 AS TotalNumAbsent
+
+FROM
+db_payroll.tbl_payroll;
+
+
+
+
+
+SELECT 
+db_payroll.tbl_payroll.empid,
+db_payroll.tbl_payroll.DateCreated,
+db_payroll.tbl_payroll.CreatedBy,
+db_payroll.tbl_payroll.date_start,
+db_payroll.tbl_payroll.date_end,
+db_payroll.tbl_payroll.name,
+db_payroll.tbl_payroll.position,
+@StatDeducID := db_payroll.tbl_payroll.StatutoryDeductionsID,
+@PRID := db_payroll.tbl_payroll.PRID,
+@AbsentNum := (IFNULL(( db_payroll.tbl_payroll.absent_no),0) + db_payroll.tbl_payroll.absent_no) / 8 AS TotalNumAbsent,
+@AbsentRate := tbl_payroll.absent_rate * 8 AS RateAbsent,
+@TotalAbsent := ROUND((@AbsentNum * @AbsentRate),2) AS TotalAbsent,
+
+
+
+FROM
+db_payroll.tbl_payroll,
+test.tbl_empplacement2;
+
+
+
+test.tbl_empplacement2.BillSubDeptID
+
+
+
+
+
+SELECT 
+test.tbl_empplacement2.BillSubDeptID,
+
+db_payroll.tbl_payroll.empid,
+db_payroll.tbl_payroll.DateCreated,
+db_payroll.tbl_payroll.CreatedBy,
+db_payroll.tbl_payroll.date_start,
+db_payroll.tbl_payroll.date_end,
+db_payroll.tbl_payroll.name,
+db_payroll.tbl_payroll.position,
+@StatDeducID := db_payroll.tbl_payroll.StatutoryDeductionsID,
+@PRID := db_payroll.tbl_payroll.PRID,
+@AbsentNum := (IFNULL(( db_payroll.tbl_payroll.absent_no),0) + db_payroll.tbl_payroll.absent_no) / 8 AS TotalNumAbsent
+
+FROM
+db_payroll.tbl_payroll
+LEFT JOIN 
+test.tbl_empplacement2  ON test.tbl_empplacement2.IDno = db_payroll.tbl_payroll.empid;
+
+
+
+
+
+SELECT 
+test.tbl_empplacement2.BillSubDeptID,
+
+db_payroll.tbl_payroll.empid,
+db_payroll.tbl_payroll.DateCreated,
+db_payroll.tbl_payroll.CreatedBy,
+db_payroll.tbl_payroll.date_start,
+db_payroll.tbl_payroll.date_end,
+db_payroll.tbl_payroll.name,
+db_payroll.tbl_payroll.position,
+@StatDeducID := db_payroll.tbl_payroll.StatutoryDeductionsID,
+@PRID := db_payroll.tbl_payroll.PRID,
+@AbsentNum := (IFNULL(( db_payroll.tbl_payroll.absent_no),0) + db_payroll.tbl_payroll.absent_no) / 8 AS TotalNumAbsent,
+@AbsentRate := tbl_payroll.absent_rate * 8 AS RateAbsent,
+@TotalAbsent := ROUND((@AbsentNum * @AbsentRate),2) AS TotalAbsent
+
+FROM
+db_payroll.tbl_payroll
+LEFT JOIN 
+test.tbl_empplacement2  ON test.tbl_empplacement2.IDno = db_payroll.tbl_payroll.empid;
+
+
+
+
+
+
+
+
+SELECT 
+test.tbl_empplacement2.BillSubDeptID,
+
+db_payroll.tbl_payroll.empid,
+db_payroll.tbl_payroll.DateCreated,
+db_payroll.tbl_payroll.CreatedBy,
+db_payroll.tbl_payroll.date_start,
+db_payroll.tbl_payroll.date_end,
+db_payroll.tbl_payroll.name,
+db_payroll.tbl_payroll.position,
+@StatDeducID := db_payroll.tbl_payroll.StatutoryDeductionsID,
+@PRID := db_payroll.tbl_payroll.PRID,
+@AbsentNum := (IFNULL(( db_payroll.tbl_payroll.absent_no),0) + db_payroll.tbl_payroll.absent_no) / 8 AS TotalNumAbsent,
+@AbsentRate := tbl_payroll.absent_rate * 8 AS RateAbsent,
+@TotalAbsent := ROUND((@AbsentNum * @AbsentRate),2) AS TotalAbsent,
+@TotalAmount := ROUND((@MonthlyRate - @TotalAbsent),2) AS TotalAmount,
+db_payroll.tbl_payroll.lhs_amount AS LHS,
+db_payroll.tbl_payroll.lhs_amount AS ADJLHS
+
+
+FROM
+db_payroll.tbl_payroll
+LEFT JOIN 
+test.tbl_empplacement2  ON test.tbl_empplacement2.IDno = db_payroll.tbl_payroll.empid;
+
+
+
+
+
+
+
+
+
+
+
+
+
+SELECT 
+test.tbl_empplacement2.BillSubDeptID,
+
+db_payroll.tbl_payroll.empid,
+db_payroll.tbl_payroll.DateCreated,
+db_payroll.tbl_payroll.CreatedBy,
+db_payroll.tbl_payroll.date_start,
+db_payroll.tbl_payroll.date_end,
+db_payroll.tbl_payroll.name,
+db_payroll.tbl_payroll.position,
+@StatDeducID := db_payroll.tbl_payroll.StatutoryDeductionsID,
+@PRID := db_payroll.tbl_payroll.PRID,
+@AbsentNum := (IFNULL(( db_payroll.tbl_payroll.absent_no),0) + db_payroll.tbl_payroll.absent_no) / 8 AS TotalNumAbsent,
+@AbsentRate := tbl_payroll.absent_rate * 8 AS RateAbsent,
+@TotalAbsent := ROUND((@AbsentNum * @AbsentRate),2) AS TotalAbsent,
+@TotalAmount := ROUND((@MonthlyRate - @TotalAbsent),2) AS TotalAmount,
+db_payroll.tbl_payroll.lhs_amount AS LHS,
+db_payroll.tbl_payroll.lhs_amount AS ADJLHS
+
+FROM
+db_payroll.tbl_payroll,
+test.tbl_empplacement2
+
+
+
+
+
+
+
+
+
+SELECT 
+test.tbl_empplacement2.BillSubDeptID,
+@MonthlyRate := (SELECT sub9_TotMonthly FROM test.tbl_testbill WHERE test.tbl_testbill.PRID = @PRID ORDER BY ID DESC LIMIT 1) AS MonthlyAmount
+FROM 
+test.tbl_empplacement2,
+
+
+
+
+
+
+SELECT 
+test.tbl_empplacement2.BillSubDeptID,
+
+db_payroll.tbl_payroll.empid,
+db_payroll.tbl_payroll.DateCreated,
+db_payroll.tbl_payroll.CreatedBy,
+db_payroll.tbl_payroll.date_start,
+db_payroll.tbl_payroll.date_end,
+db_payroll.tbl_payroll.name,
+db_payroll.tbl_payroll.position,
+@StatDeducID := db_payroll.tbl_payroll.StatutoryDeductionsID,
+@PRID := db_payroll.tbl_payroll.PRID,
+@AbsentNum := (IFNULL(( db_payroll.tbl_payroll.absent_no),0) + db_payroll.tbl_payroll.absent_no) / 8 AS TotalNumAbsent,
+@AbsentRate := tbl_payroll.absent_rate * 8 AS RateAbsent,
+@TotalAbsent := ROUND((@AbsentNum * @AbsentRate),2) AS TotalAbsent
+
+FROM
+db_payroll.tbl_payroll
+
+LEFT JOIN test.tbl_empplacement2 ON test.tbl_empplacement2.IDno = db_payroll.tbl_payroll.empid,
+LEFT JOIN test.custinfo ON test.custinfo.CustID = test.tbl_testpay.CustID
+;
+
+
+
+
+
+SELECT 
+test.tbl_empplacement2.BillSubDeptID,
+db_payroll.tbl_payroll.empid,
+db_payroll.tbl_payroll.DateCreated,
+db_payroll.tbl_payroll.date_start as CutoffStart,
+db_payroll.tbl_payroll.CreatedBy,
+db_payroll.tbl_payroll.date_start,
+db_payroll.tbl_payroll.date_end,
+db_payroll.tbl_payroll.name,
+db_payroll.tbl_payroll.position,
+@StatDeducID := db_payroll.tbl_payroll.StatutoryDeductionsID,
+@MonthlyRate := (SELECT sub9_TotMonthly FROM test.tbl_testbill WHERE test.tbl_testbill.PRID = @PRID ORDER BY ID DESC LIMIT 1) AS MonthlyAmount,
+@PRID := db_payroll.tbl_payroll.PRID,
+@AbsentNum := (IFNULL(( db_payroll.tbl_payroll1.absent_no),0) + db_payroll.tbl_payroll.absent_no) / 8 AS TotalNumAbsent,
+@AbsentRate := tbl_payroll.absent_rate * 8 AS RateAbsent,
+@TotalAbsent := ROUND((@AbsentNum * @AbsentRate),2) AS TotalAbsent,
+db_payroll.tbl_payroll.lhs_amount AS LHS,
+db_payroll.tbl_payroll1.lhs_amount AS ADJLHS,
+test.tbl_billingsubdepartment.BillDeptID,
+test.tbl_empplacement2.DateHired,
+test.tbl_billingdepartment.Description
+
+FROM
+db_payroll.tbl_payroll
+
+LEFT JOIN test.tbl_empplacement2 ON test.tbl_empplacement2.IDno = tbl_payroll.empid
+LEFT JOIN db_payroll.tbl_payroll1 ON db_payroll.tbl_payroll1.AdjustmentID = tbl_payroll.AdjustmentID
+LEFT JOIN test.tbl_billingdepartment ON test.tbl_billingdepartment.BillDeptID = test.tbl_empplacement2.BillSubDeptID
+LEFT JOIN test.tbl_billingsubdepartment ON test.tbl_billingsubdepartment.BillSubDeptID = test.tbl_empplacement2.BillSubDeptID
+LEFT JOIN test.tbl_testpay ON test.tbl_testpay.PRID = tbl_payroll.PRID
+LEFT JOIN test.custinfo ON test.custinfo.CustID = test.tbl_testpay.CustID
+
+WHERE  db_payroll.tbl_payroll.date_start BETWEEN '2019-03-01' AND '2019-03-15';
+
+
+
+
+
+
+
+
+
+
+// updated
+
+SELECT 
+test.tbl_empplacement2.BillSubDeptID,
+db_payroll.tbl_payroll.empid,
+db_payroll.tbl_payroll.DateCreated,
+db_payroll.tbl_payroll.date_start as CutoffStart,
+db_payroll.tbl_payroll.CreatedBy,
+db_payroll.tbl_payroll.date_start,
+db_payroll.tbl_payroll.date_end,
+db_payroll.tbl_payroll.name,
+db_payroll.tbl_payroll.position,
+@StatDeducID := db_payroll.tbl_payroll.StatutoryDeductionsID,
+@MonthlyRate := (SELECT sub9_TotMonthly FROM test.tbl_testbill WHERE test.tbl_testbill.PRID = @PRID ORDER BY ID DESC LIMIT 1) AS MonthlyAmount,
+@PRID := db_payroll.tbl_payroll.PRID,
+@AbsentNum := (IFNULL(( db_payroll.tbl_payroll1.absent_no),0) + db_payroll.tbl_payroll.absent_no) / 8 AS TotalNumAbsent,
+@AbsentRate := tbl_payroll.absent_rate * 8 AS RateAbsent,
+@TotalAbsent := ROUND((@AbsentNum * @AbsentRate),2) AS TotalAbsent,
+db_payroll.tbl_payroll.lhs_amount AS LHS,
+db_payroll.tbl_payroll1.lhs_amount AS ADJLHS,
+test.tbl_billingsubdepartment.BillDeptID,
+test.tbl_empplacement2.DateHired,
+test.tbl_billingdepartment.Description
+
+FROM
+db_payroll.tbl_payroll
+
+LEFT JOIN test.tbl_empplacement2 ON test.tbl_empplacement2.IDno = tbl_payroll.empid
+LEFT JOIN db_payroll.tbl_payroll1 ON db_payroll.tbl_payroll1.AdjustmentID = tbl_payroll.AdjustmentID
+LEFT JOIN test.tbl_billingdepartment ON test.tbl_billingdepartment.BillDeptID = test.tbl_empplacement2.BillSubDeptID
+LEFT JOIN test.tbl_billingsubdepartment ON test.tbl_billingsubdepartment.BillSubDeptID = test.tbl_empplacement2.BillSubDeptID
+LEFT JOIN test.tbl_testpay ON test.tbl_testpay.PRID = tbl_payroll.PRID
+LEFT JOIN test.custinfo ON test.custinfo.CustID = test.tbl_testpay.CustID
+
+WHERE db_payroll.tbl_payroll.date_start BETWEEN '2023-01-01' AND '2023-03-01'
+AND test.tbl_empplacement2.billsubdeptid IS NOT NULL
+AND tbl_payroll.company_name = 'BDO Unibank Inc.'
+AND test.custinfo.CustID = '00000014'
+GROUP BY test.tbl_empplacement2.BillSubDeptID
+ORDER BY test.tbl_empplacement2.billsubdeptid, db_payroll.tbl_payroll.name ASC;
+
+
+
+
+SELECT 
+test.city.DescCity,
+test.tbl_position.Position,
+db_payroll.tbl_payroll.name,
+db_payroll.tbl_custombill.cbrID,
+test.tbl_billingadjustment.AdjustmentID,
+db_payroll.tbl_custombill.status
+
+FROM
+test.city
+LEFT JOIN db_payroll.tbl_payroll ON test.city.id
+LEFT JOIN db_payroll.tbl_custombill ON test.city.id
+LEFT JOIN test.tbl_position ON  test.city.id
+;

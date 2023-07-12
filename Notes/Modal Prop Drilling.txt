@@ -1,0 +1,646 @@
+// Parent Div
+
+import React, { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import { MdPersonAddAlt1 } from "react-icons/md";
+import HrRequestAdd from "./HrRequestAdd";
+import { API_URL_ADMIN } from "../../utils/Url";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const HrRequest = () => {
+  const [addRequest, setAddRequest] = useState(false);
+  const [showRequest, setShowRequest] = useState([]);
+
+  // Notify Create
+  const notify_Delete = () => {
+    toast.error("Request Successfully Deleted", {
+      position: "bottom-right",
+      hideProgressBar: true,
+      autoClose: 5000,
+      pauseOnHover: false,
+      theme: "colored",
+    });
+  };
+
+  useEffect(() => {
+    axios
+      .get(API_URL_ADMIN + "view-all-prf-request")
+      .then((res) => {
+        setShowRequest(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, [setAddRequest]);
+
+  const deleteRequest = (ID) => {
+    axios
+      .delete(API_URL_ADMIN + `delete-position-request/${ID}`)
+      .then((res) => {
+        setShowRequest(res.data);
+        notify_Delete();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  return (
+    <div className="w-full relative h-full flex flex-col p-4">
+      <span className="text-[18px] text-black arial-narrow-bold">
+        Human Resource Request Personel
+      </span>
+
+      <div className="w-full flex justify-between <md:(w-[80%])">
+        <div className="mt-6 flex h-8 w-[20%] rounded-full text-black shadow-sm shadow-gray-600 bg-white dark:(bg-gray-600 text-light-50 shadow-none) <md:(w-[100%])">
+          {/* <FaSearch className="px-2 h-8 w-8" />
+          <input
+            className="border-none outline-none w-full bg-transparent placeholder-gray-40 "
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+              const newOffset =
+                (0 * parseInt(itemsPerPage)) % listUsers?.length;
+              setItemOffset(newOffset);
+            }}
+            placeholder="Search"
+          /> */}
+        </div>
+        <button
+          className="mr-10 mt-5 text-yellow-600 text-[15px] hover:(bg-gray-200 border-gray-200) p-1  flex items-center focus:(outline-none) dark:(text-green-400 bg-transparent shadow-none border-green-400 hover:bg-green-400 hover:text-black)"
+          onClick={() => setAddRequest(!addRequest)}
+        >
+          <MdPersonAddAlt1 className="mr-2 text-[23px] <md:(text-[14px] mr-1)" />
+          Add Account
+        </button>
+      </div>
+
+      <div className="w-full h-[60vh] mt-1 overflow-auto flex justify-center <md:(overflow-auto)">
+        <table className="w-[100%] h-[10%]  mt-4 overflow-hidden  dark:(bg-white/20 shadow-md shadow-xs)  <md:(w-70 h-auto)">
+          <thead>
+            <tr className="shadow-sm shadow-gray-800 bg-color-prdc h-10 dark:(bg-blue-500) <md:(hidden)">
+              <th
+                className=" text-black arial-narrow-bold text-left cursor-pointer text-[14px] hover:(bg-yellow-900) <md:(hidden) dark:(border-white text-white) "
+                // onClick={() => setSort("ID")}
+              >
+                <span className="ml-2">No.</span>
+              </th>
+
+              <th
+                className=" text-black text-left arial-narrow-bold text-[14px] cursor-pointer hover:(bg-yellow-900)   <md:(hidden) dark:(border-white text-white)"
+                // onClick={() => setSort("employee_id")}
+              >
+                Position
+              </th>
+              <th
+                className=" text-black text-left arial-narrow-bold text-[14px] cursor-pointer hover:(bg-yellow-900)   <md:(hidden) dark:(border-white text-white)"
+                // onClick={() => setSort("employee_id")}
+              >
+                Avilable slot
+              </th>
+
+              <th
+                className=" text-black text-left arial-narrow-bold text-[14px] cursor-pointer hover:(bg-yellow-900) <md:(hidden) dark:(border-white text-white)"
+                // onClick={() => setSort("LastName")}
+              >
+                Department
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {showRequest.map((data, index) => {
+              return (
+                <tr>
+                  <td>{index + 1}</td>
+                  <td>{data.request_position}</td>
+                  <td>{data.request_count}</td>
+                  <td>{data.request_department}</td>
+                  <td>
+                    <button
+                      onClick={() => {
+                        deleteRequest(data.ID);
+                      }}
+                      className="bg-red-500 text-white font-bold w-20 mt-2 active:scale-1 active:duration-75 transition transform ease-in-out hover:scale-110"
+                    >
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <ToastContainer />
+      <AnimatePresence>
+        {addRequest && (
+          <HrRequestAdd
+            setAddRequest={setAddRequest}
+            setShowRequest={setShowRequest}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default HrRequest;
+
+
+
+
+
+// child div
+
+import React, { useEffect, useState } from "react";
+import { motion, MotionConfig } from "framer-motion";
+import { AiFillCloseCircle } from "react-icons/ai";
+import { BiSave } from "react-icons/bi";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { API_URL_ADMIN } from "../../utils/Url";
+
+const HrRequestAdd = ({ setAddRequest, setShowRequest }) => {
+  const [request, setRequest] = useState({
+    position: "",
+    availableslots: "",
+    department: "",
+  });
+
+  const AddRequest = (e) => {
+    e.preventDefault();
+    axios
+      .post(API_URL_ADMIN + "create-position-request", {
+        request_position: request.position,
+        request_count: request.availableslots,
+        request_department: request.department,
+      })
+      .then((res) => {
+        setShowRequest(res.data);
+        notify_Create();
+        console.log();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  //   Notify Create
+  const notify_Create = () => {
+    toast.success("Request Successfully Created", {
+      position: "bottom-right",
+      hideProgressBar: true,
+      autoClose: 5000,
+      pauseOnHover: false,
+      theme: "colored",
+    });
+  };
+  return (
+    <motion.div
+      className="w-full h-full absolute bg-black/50 items-center flex justify-center !top-0 !left-0"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div className="bg-gray-200 h-90 w-200 items-center rounded-md shadow-md shadow-gray-900  z-999">
+        <div className="w-full h-full  flex flex-col item-center text-center mb-5">
+          <span className="mt-5 arial-narrow-bold text-[23px]"></span>
+
+          {/* Close Button ================================================================================================================================== close button */}
+          <AiFillCloseCircle
+            className="absolute fixed top-2 right-2 text-[20px] cursor-pointer text-red-600 hover:(text-red-400 ) <md:(text-[50px])"
+            onClick={() => setAddRequest(false)}
+          />
+          {/* Close Button ================================================================================================================================== close button */}
+
+          <div className="">
+            <h1 className="text-[20px]">HR Request Form</h1>
+          </div>
+
+          <div className=" ml-5">
+            <div className=" mt-10">
+              <input
+                placeholder="Position"
+                className="border w-65 text-[18px] border-black"
+                type="text"
+                onChange={(e) =>
+                  setRequest({ ...request, position: e.target.value })
+                }
+              />
+            </div>
+          </div>
+          <div className=" ml-5">
+            <div className=" mt-15">
+              <input
+                placeholder="Available Slots"
+                className="border w-65 text-[18px] border-black"
+                type="text"
+                onChange={(e) =>
+                  setRequest({ ...request, availableslots: e.target.value })
+                }
+              />
+            </div>
+          </div>
+          <div className=" ml-5">
+            <div className=" mt-15">
+              <input
+                placeholder="Department"
+                className="border w-65 text-[18px] border-black"
+                type="text"
+                onChange={(e) =>
+                  setRequest({ ...request, department: e.target.value })
+                }
+              />
+            </div>
+          </div>
+
+          <div className="w-full relative flex items-center justify-end mt-4 ">
+            <button
+              // ============================================================================================================== reference
+              onClick={AddRequest}
+              className=" hover:(bg-gray-400 border-gray-300 ) text-[15px] mb-5 flex items-center justify-center text-green-600   shadow-gray-600 mt-2 w-20 h-6 mr-12 disabled:(bg-gray-500 border-gray-500 cursor-not-allowed)  focus:(outline-none) dark:(bg-transparent border-green-500 border-2 text-green-500 hover:bg-green-700 hover:text-black)"
+            >
+              <BiSave className="mr-2 text-green-600" />
+              Save
+            </button>
+            <ToastContainer />
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+export default HrRequestAdd;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+passing data to different modals (Update Function)
+
+
+
+// Child Modal
+import React, { useEffect, useState } from "react";
+import { motion, MotionConfig } from "framer-motion";
+import { AiFillCloseCircle } from "react-icons/ai";
+import { BiSave } from "react-icons/bi";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { API_URL_ADMIN } from "../../utils/Url";
+
+const HrRequestUpdate = ({ setEditRequest, setShowRequest, editRequest }) => {
+  const [editData, setEditData] = useState([]);
+  const [valueData, setValueData] = useState({
+    position: "",
+    count: "",
+    department: "",
+  });
+  console.log(valueData.position);
+
+  useEffect(() => {
+    axios(API_URL_ADMIN + `view-prf-request/${editRequest.id}`)
+      .then((res) => {
+        setEditData(res.data);
+        setValueData({
+          position: res.data.request_position,
+          count: res.data.request_count,
+          department: res.data.request_department,
+        });
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const notify_warningEmpyFields = () => {
+    toast.warn("All field are empty!", {
+      position: "bottom-right",
+      hideProgressBar: true,
+      autoClose: 5000,
+      pauseOnHover: false,
+      theme: "colored",
+    });
+  };
+  const notify_Success = () => {
+    toast.success("Request Updated", {
+      position: "bottom-right",
+      hideProgressBar: true,
+      autoClose: 500,
+      pauseOnHover: false,
+      theme: "colored",
+    });
+  };
+
+  const updatePRFrequest = () => {
+    try {
+      if (
+        valueData.position == "" &&
+        valueData.count == "" &&
+        valueData.department == ""
+      ) {
+        return notify_warningEmpyFields();
+      } else if (valueData.position == "") {
+        return alert("empty");
+      } else if (valueData.count == "") {
+        return alert("empty2");
+      } else if (valueData.department == "") {
+        return alert("empty3");
+      } else {
+        axios
+          .put(API_URL_ADMIN + `update-position-prf/${editRequest.id}`, {
+            request_position: valueData.position,
+            request_count: valueData.count,
+            request_department: valueData.department,
+          })
+          .then((res) => {
+            setShowRequest(res.data);
+            notify_Success();
+            setEditRequest(false);
+          });
+      }
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  };
+
+  return (
+    <motion.div
+      className="w-full h-full absolute bg-black/50 items-center flex justify-center !top-0 !left-0"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div className="bg-gray-200 h-[500px] w-[39rem] items-center rounded-md shadow-md shadow-gray-900 overflow-y-auto overflow-x-hidden z-999">
+        <div className="w-full h-full relative flex flex-col item-center mb-5">
+          <AiFillCloseCircle
+            className="absolute top-2 right-2 text-[20px] cursor-pointer text-red-600 hover:(text-red-400 ) <md:(text-[50px])"
+            onClick={() => setEditRequest(false)}
+          />
+
+          <form className="flex h-[95%] w-full flex-col mt-3">
+            <span className="my-3 ml-2 font-Roboto text-[20px] arial-narrow-bold w-full text-center">
+              PRF Request Form
+            </span>
+
+            <div className="addUser-div ">
+              <span className="addUser-span mt-5">Request Position</span>
+              <input
+                type="text"
+                name="position"
+                className="addUser-input mt-5"
+                placeholder={editData.request_position}
+                value={valueData.position}
+                onChange={(e) =>
+                  setValueData({ ...valueData, position: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="addUser-div">
+              <span className="addUser-span mt-5">Avalilable Slots</span>
+              <input
+                className="w-90 border h-7 border-black rounded-md bg-white focus:(outline-none) mt-5"
+                type="number"
+                min="1"
+                name="availableslots"
+                placeholder={editData.request_count}
+                value={valueData.count}
+                onChange={(e) =>
+                  setValueData({ ...valueData, count: e.target.value })
+                }
+              />
+            </div>
+            <div className="addUser-div">
+              <span className="addUser-span mt-5">Department</span>
+
+              <input
+                type="text"
+                name="department"
+                className="addUser-input mt-5"
+                placeholder={editData.request_department}
+                value={valueData.department}
+                onChange={(e) =>
+                  setValueData({ ...valueData, department: e.target.value })
+                }
+                required
+              />
+            </div>
+          </form>
+          <div className="w-full flex items-center justify-end mt-50 ">
+            <button
+              onClick={updatePRFrequest}
+              className=" hover:(bg-gray-400 border-gray-300 ) text-[15px] mb-5 flex items-center justify-center text-green-600   shadow-gray-600 mt-2 w-20 h-6 mr-12 disabled:(bg-gray-500 border-gray-500 cursor-not-allowed)  focus:(outline-none) dark:(bg-transparent border-green-500 border-2 text-green-500 hover:bg-green-700 hover:text-black)"
+            >
+              <BiSave className="mr-2 text-green-600" />
+              Save
+            </button>
+          </div>
+        </div>
+        <ToastContainer />
+      </motion.div>
+    </motion.div>
+  );
+};
+
+export default HrRequestUpdate;
+
+
+
+
+
+
+
+
+
+
+
+
+// Parent Modal
+
+import React, { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import { MdPersonAddAlt1 } from "react-icons/md";
+import HrRequestAdd from "./HrRequestAdd";
+import HrRequestUpdate from "./HrRequestUpdate";
+import { API_URL_ADMIN } from "../../utils/Url";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const HrRequest = () => {
+  const [addRequest, setAddRequest] = useState(false);
+  const [editRequest, setEditRequest] = useState({ activator: false, id: "" });
+  const [showRequest, setShowRequest] = useState([]);
+
+  // Notify Create
+  const notify_Delete = () => {
+    toast.error("Request Successfully Deleted", {
+      position: "bottom-right",
+      hideProgressBar: true,
+      autoClose: 5000,
+      pauseOnHover: false,
+      theme: "colored",
+    });
+  };
+
+  useEffect(() => {
+    axios
+      .get(API_URL_ADMIN + "view-all-prf-request")
+      .then((res) => {
+        setShowRequest(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, [setAddRequest, setEditRequest]);
+
+  const deleteRequest = (ID) => {
+    axios
+      .delete(API_URL_ADMIN + `delete-position-request/${ID}`)
+      .then((res) => {
+        setShowRequest(res.data);
+        notify_Delete();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  return (
+    <div className="w-full relative h-full flex flex-col p-4">
+      <span className="text-[18px] text-black arial-narrow-bold">
+        Human Resource Request Personel
+      </span>
+
+      <div className="w-full flex justify-between <md:(w-[80%])">
+        <div className="mt-6 flex h-8 w-[20%] rounded-full text-black shadow-sm shadow-gray-600 bg-white dark:(bg-gray-600 text-light-50 shadow-none) <md:(w-[100%])">
+          {/* <FaSearch className="px-2 h-8 w-8" />
+          <input
+            className="border-none outline-none w-full bg-transparent placeholder-gray-40 "
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+              const newOffset =
+                (0 * parseInt(itemsPerPage)) % listUsers?.length;
+              setItemOffset(newOffset);
+            }}
+            placeholder="Search"
+          /> */}
+        </div>
+        <button
+          className="mr-10 mt-5 text-yellow-600 text-[15px] hover:(bg-gray-200 border-gray-200) p-1  flex items-center focus:(outline-none) dark:(text-green-400 bg-transparent shadow-none border-green-400 hover:bg-green-400 hover:text-black)"
+          onClick={() => setAddRequest(!addRequest)}
+        >
+          <MdPersonAddAlt1 className="mr-2 text-[23px] <md:(text-[14px] mr-1)" />
+          Add Account
+        </button>
+      </div>
+
+      <div className="w-full h-[60vh] mt-1 overflow-auto flex justify-center <md:(overflow-auto)">
+        <table className="w-[100%] h-[10%]  mt-4 overflow-hidden  dark:(bg-white/20 shadow-md shadow-xs)  <md:(w-70 h-auto)">
+          <thead>
+            <tr className="shadow-sm shadow-gray-800 bg-color-prdc h-10 dark:(bg-blue-500) <md:(hidden)">
+              <th
+                className=" text-black arial-narrow-bold text-left cursor-pointer text-[14px] hover:(bg-yellow-900) <md:(hidden) dark:(border-white text-white) "
+                // onClick={() => setSort("ID")}
+              >
+                <span className="ml-2">No.</span>
+              </th>
+
+              <th
+                className=" text-black text-left arial-narrow-bold text-[14px] cursor-pointer hover:(bg-yellow-900)   <md:(hidden) dark:(border-white text-white)"
+                // onClick={() => setSort("employee_id")}
+              >
+                Position
+              </th>
+              <th
+                className=" text-black text-left arial-narrow-bold text-[14px] cursor-pointer hover:(bg-yellow-900)   <md:(hidden) dark:(border-white text-white)"
+                // onClick={() => setSort("employee_id")}
+              >
+                Avilable slot
+              </th>
+
+              <th
+                className=" text-black text-left arial-narrow-bold text-[14px] cursor-pointer hover:(bg-yellow-900) <md:(hidden) dark:(border-white text-white)"
+                // onClick={() => setSort("LastName")}
+              >
+                Department
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {showRequest.map((data, index) => {
+              return (
+                <tr>
+                  <td>{index + 1}</td>
+                  <td>{data.request_position}</td>
+                  <td>{data.request_count}</td>
+                  <td>{data.request_department}</td>
+                  <td>
+                    <button
+                      onClick={() => {
+                        setEditRequest({
+                          activator: true,
+                          id: data.ID,
+                          position: data.request_position,
+                        });
+                      }}
+                      // onClick={() => console.log(data.ID)}
+                      className="bg-yellow-500 mr-2 text-white font-bold w-20 mt-2 active:scale-1 active:duration-75 transition transform ease-in-out hover:scale-110"
+                    >
+                      Update
+                    </button>
+                    <button
+                      onClick={() => {
+                        deleteRequest(data.ID);
+                      }}
+                      className="bg-red-500 text-white font-bold w-20 mt-2 active:scale-1 active:duration-75 transition transform ease-in-out hover:scale-110"
+                    >
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <ToastContainer />
+      <AnimatePresence>
+        {/* // ================================================================================  note: reference for promp drill// */}
+        {addRequest && (
+          <HrRequestAdd
+            setAddRequest={setAddRequest}
+            setShowRequest={setShowRequest}
+          />
+        )}
+        {/* // ================================================================================  note: reference for promp drill// */}
+        {editRequest.activator && (
+          <HrRequestUpdate
+            setEditRequest={setEditRequest}
+            editRequest={editRequest}
+            setShowRequest={setShowRequest}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default HrRequest;
+
+

@@ -1,0 +1,107 @@
+number format for all govenrment numbers and id's
+
+  function convertToValidPhoneNumber(text) {
+    var result = [];
+    text = text.replace(/[^\d]/g, "");
+    while (text.length >= 6) {
+      result.push(text.substring(0, 2));
+      text = text.substring(2);
+      result.push(text.substring(0, 7));
+      text = text.substring(7);
+      result.push(text.substring(0, 1));
+      text = text.substring(1);
+    }
+    if (text.length > 0) result.push(text);
+    return result.join("-");
+  }
+  const str = "1258774561";
+  console.log(convertToValidPhoneNumber(str));
+
+
+
+
+BroadcastChannel "sending data to a different tabs"
+
+const userChannel = new BroadcastChannel("user");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const userData = {
+      username,
+      password,
+    };
+    userChannel.postMessage({
+      payload: {
+        type: "SIGN_IN_USER",
+      },
+    });
+
+    dispatch(login_user(userData));
+  };
+  //  ================================================================================================
+  useEffect(() => {
+    userChannel.onmessage = (data) => {
+      if (data.data.payload.type === "SIGN_IN_USER") {
+        navigate("/dashboard");
+        window.location.reload();
+      }
+    };
+  }, [handleSubmit]);
+
+
+
+
+
+
+
+
+Broadcast Channel Logout function
+
+ const userChannel = new BroadcastChannel("user");
+
+  const { user, isLoadingUser, isSuccessUser, isErrorUser, messageUser } =
+    useSelector((state) => state.user);
+
+  const decodedToken = jwt(user);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(moment().format("MMMM DD YYYY  hh:mm A"));
+      dispatch(checkToken(user));
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    setAdmin(jwt(user));
+  }, []);
+
+  //LOGOUT FUNCTION
+  const handleLogout = () => {
+    dispatch(logout_user(decodedToken?.employeeId));
+    dispatch(reset());
+
+    userChannel.postMessage({
+      payload: {
+        type: "SIGN_OUT_USER",
+      },
+    });
+    redirect("/");
+    localStorage.setItem("theme", "light");
+  };
+
+  //FUNCTIONS THAT LOGOUTS THE OTHER TABS
+  useEffect(() => {
+    userChannel.onmessage = (data) => {
+      if (data.data.payload.type === "SIGN_OUT_USER") {
+        dispatch(logout_user(decodedToken?.employeeId));
+        dispatch(reset());
+      }
+      console.log(data);
+      window.location.reload();
+      redirect("/");
+      userChannel.close();
+    };
+  }, [handleLogout]);

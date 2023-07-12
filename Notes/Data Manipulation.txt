@@ -1,0 +1,12 @@
+const date = new Date();
+const milliSecNow = date.getTime();
+
+const date2 = new Date("11/21/2020")
+const SecVariable = date2.getTime();
+
+if(milliSecNow >= SecVariable){
+  console.log("past")
+}else {
+  console.log("future")
+}
+console.log(milliSecNow)
