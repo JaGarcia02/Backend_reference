@@ -6,7 +6,7 @@ const database_connection = async () => {
     console.log("Database Status: Connected".underline.magenta);
   } catch (error) {
     console.log(error);
-    return resizeBy.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
