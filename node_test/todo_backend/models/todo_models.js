@@ -10,6 +10,10 @@ const todoSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    task_status: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
