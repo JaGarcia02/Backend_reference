@@ -1,18 +1,26 @@
 module.exports = (sequelize, DataTypes) => {
-  const testing = sequelize.define("testing", {
+  const time_keeping = sequelize.define("time_keeping", {
     ID: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    employee_name: {
+    cutoff_id: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    REG: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    ABSENT: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
     },
     employee_id: {
       type: DataTypes.STRING,
       allowNull: false,
     },
   });
-  return testing;
+  return time_keeping;
 };
