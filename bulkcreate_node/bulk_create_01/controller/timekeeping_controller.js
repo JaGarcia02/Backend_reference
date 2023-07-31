@@ -2,11 +2,10 @@ const { time_dtr, time_keeping } = require("../models");
 
 const save_cutoff = async (req, res) => {
   try {
-    const { timekeeping, dtr } = req.body;
-    const new_data = await time_keeping.bulkCreate(timekeeping);
+    const { timeKeepingData, dtr } = req.body;
+    const new_data = await time_keeping.bulkCreate(timeKeepingData);
     await time_dtr.bulkCreate(dtr);
-    let test;
-    console.log({ test: { new_data: new_data, time_dtr: dtr } });
+    console.log(dtr);
     return res.status(200).json(new_data);
   } catch (error) {
     res.status(500);
