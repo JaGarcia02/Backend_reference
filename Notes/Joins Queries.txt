@@ -1,0 +1,91 @@
+Problem 1
+***********************************************
+salesperson_id|first_name|last_name|
+--------------|----------|---------|
+             1|Green     |Wright   |
+             2|Jones     |Collins  |
+             3|Bryant    |Davis    |
+***********************************************
+table: address
+address_id|salesperson_id|city       |state     |country|
+----------|--------------|-----------|----------|-------|
+         1|             2|Los Angeles|California|USA    |
+         2|             3|Denver     |Colorado  |USA    |
+         3|             4|Atlanta    |Georgia   |USA    |
+***********************************************
+Output:
+first_name|last_name|city       |state     |
+----------|---------|-----------|----------|
+Jones     |Collins  |Los Angeles|California|
+Bryant    |Davis    |Denver     |Colorado  |
+Green     |Wright   |           |          |
+
+SELECT pat.first_name, pat.last_name, prov.province_name  from province_names 
+AS prov join patients as pat ON prov.province_id = pat.province_id ORDER BY province_name ASC  
+
+
+Problem 2
+***********************************************
+Field	Type	Null	Key	Default	Extra
+sale_id	int(11)	YES			
+employee_id	int(11)	YES			
+sale_date	date	YES			
+sale_amt	int(11)	YES			
+Data:
+***********************************************
+sale_id	employee_id	sale_date	sale_amt
+1	1000	2012-03-08	4500
+2	1001	2012-03-09	5500
+3	1003	2012-04-10	3500
+3	1003	2012-04-10	2500
+***********************************************
+SecondHighestSale|
+-----------------|
+             4500|
+
+SELECT MAX(sale_amt) AS SecondHighestSale
+FROM (SELECT DISTINCT sale_amt
+FROM salemast ORDER BY sale_amt DESC LIMIT 2 offset 1) AS sale;
+
+SELECT MAX(sale_amt) AS SecondHighestSale
+FROM salemast
+WHERE sale_amt<(SELECT MAX(sale_amt) FROM salemast);
+
+
+Problem 3
+************************************************
+Field	    Type	Null    Key    Default	 Extra
+student_id  int(11)	YES			
+marks	    int(11)	YES			
+************************************************
+Data:
+student_id	marks
+101	        83
+102	        79
+103	        83
+104	        83
+105	        83
+106	        79
+107	        79
+108	        83
+************************************************
+student_id|marks|
+----------|-----|
+       101|   83|
+       102|   79|
+       103|   83|
+       104|   83|
+       105|   83|
+       106|   79|
+       107|   79|
+       108|   83|
+************************************************
+Output:
+ConsecutiveNums|
+---------------|
+             83|
+
+
+SELECT DISTINCT L1.marks AS  ConsecutiveNums
+FROM (logs L1 JOIN logs L2 ON L1.marks = L2.marks AND L1.student_id = L2.student_id-1)
+JOIN logs L3 ON L1.marks = L3.marks AND L2.student_id = L3.student_id-1;
