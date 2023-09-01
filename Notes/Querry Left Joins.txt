@@ -338,3 +338,11 @@ LEFT JOIN db_payroll.tbl_payroll ON test.city.id
 LEFT JOIN db_payroll.tbl_custombill ON test.city.id
 LEFT JOIN test.tbl_position ON  test.city.id
 ;
+
+
+
+https://www.sql-practice.com/
+select cus.company_name, cus.contact_name, ord.order_date,ord.shipped_date,ord.ship_address, ordDets.quantity,ordDets.discount,prod.product_name, prod.unit_price FROm customers AS cus 
+LEFT join orders AS ord ON cus.customer_id = ord.customer_id 
+LEFT JOIN order_details AS ordDets ON ord.order_id = ordDets.order_id 
+LEFT JOIN products AS prod ON ordDets.product_id = prod.product_id where prod.unit_price between 100 and 200 ORDER BY ord.order_date DESC, cus.contact_name ASC, ord.ship_address ASC;
