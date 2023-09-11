@@ -1,10 +1,15 @@
 const express = require("express");
+const cors = require("cors");
 const dotenv = require("dotenv").config();
 const app = express();
 const db = require("./models");
 const port = process.env.PORT || 8888;
+const TimekeepingRouter = require("./routes/timekeeping_dtr_route");
 
 app.use(express.json());
+app.use(cors());
+
+app.use("/api", TimekeepingRouter);
 
 db.sequelize
   .sync()
@@ -13,8 +18,6 @@ db.sequelize
       (port,
       () => {
         console.log(`Server is running on port: ${port}`);
-        console.log(`Database Host: ${process.env.Database_Host}`);
-        console.log(`Database Username: ${process.env.Database_Username}`);
       })
     );
   })
