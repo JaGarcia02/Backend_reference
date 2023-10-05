@@ -1,2 +1,8 @@
 https://www.youtube.com/watch?v=Crk_5Xy8GMA&t=503s&ab_channel=PedroTech
 https://www.youtube.com/watch?v=YGqCZjdgJJk&ab_channel=EnvatoTuts%2B
+
+Ecomers Project:
+https://www.youtube.com/watch?v=dTFXufTgfOE&ab_channel=CodingWithDawid 
+
+Tutorial for Nestjs Realtime chat app:
+https://www.youtube.com/watch?v=xPmUKBrZL74&ab_channel=codingIsLove 
